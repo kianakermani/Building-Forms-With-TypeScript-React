@@ -22,7 +22,7 @@ function App() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = (data: FieldValues) => console.log(data);
@@ -31,17 +31,29 @@ function App() {
     <>
       <form action="" className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
-          <label className="form-label">Description</label>
+          <label className="form-label" htmlFor="Description">
+            Description
+          </label>
 
-          <input type="text" className="form-control" {...register("msg")} />
+          <input
+            id="Description"
+            type="text"
+            className="form-control"
+            {...register("msg")}
+            autoComplete="off"
+          />
           {errors.msg && <p className="text-danger">{errors.msg.message}</p>}
         </div>
         <div className="mb-3">
-          <label className="form-label">Amount</label>
+          <label htmlFor="Amount" className="form-label">
+            Amount
+          </label>
           <input
+            id="Amount"
             type="number"
             className="form-control"
             {...register("msg2", { valueAsNumber: true })}
+            autoComplete="off"
           />
           {errors.msg2 && <p className="text-danger">{errors.msg2.message}</p>}
         </div>
@@ -49,14 +61,16 @@ function App() {
           <label htmlFor="Category" className="form-label">
             Category
           </label>
-          <select name="" id="" className="form-control">
+          <select name="" id="Category" className="form-control">
             <option value=""></option>
             <option value="Groceries">Groceries</option>
             <option value="Utilities">Utilities</option>
             <option value="Entertainment">Entertainment</option>
           </select>
         </div>
-        <button className="btn btn-primary">Submit</button>
+        <button className="btn btn-primary" disabled={!isValid}>
+          Submit
+        </button>
       </form>
 
       <div className="drop">
