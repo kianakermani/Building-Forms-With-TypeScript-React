@@ -17,6 +17,7 @@ function App() {
             Category
           </label>
           <select name="" id="" className="form-control">
+            <option value=""></option>
             <option value="Groceries">Groceries</option>
             <option value="Utilities">Utilities</option>
             <option value="Entertainment">Entertainment</option>
