@@ -1,13 +1,15 @@
+import { FormEvent } from "react";
 import "./App.css";
 
 function App() {
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    console.log("submitted");
+  };
+
   return (
     <>
-      <form
-        action=""
-        className="form"
-        onSubmit={() => console.log("Submitted")}
-      >
+      <form action="" className="form" onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Description</label>
           <input type="text" className="form-control" />
