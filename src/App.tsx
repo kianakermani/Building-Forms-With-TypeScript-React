@@ -3,7 +3,11 @@ import "./App.css";
 function App() {
   return (
     <>
-      <form action="" className="form">
+      <form
+        action=""
+        className="form"
+        onSubmit={() => console.log("Submitted")}
+      >
         <div className="mb-3">
           <label className="form-label">Description</label>
           <input type="text" className="form-control" />

@@ -1,9 +1,12 @@
 form {
-  padding: 40px 500px;
+  padding: 40px 0;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .drop {
-  padding: 0px 500px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .t {
