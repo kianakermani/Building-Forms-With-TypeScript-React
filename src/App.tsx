@@ -5,23 +5,31 @@ import ExpenseList from "./ExpenseList";
 import ExpenseFilter from "./ExpenseFilter";
 import ExpenseForm from "./ExpenseForm";
 
-export const categories = ["Groceries", "Utilities", "Entertainment"];
 function App() {
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [expenses, setExpenses] = useState([
-    { id: 1, description: "aaa", amount: 1000, category: "Utilities" },
-    { id: 2, description: "bbb", amount: 1000, category: "Utilities" },
-    { id: 3, description: "ccc", amount: 1000, category: "Utilities" },
-    { id: 4, description: "ddd", amount: 1000, category: "Utilities" },
+    { id: 1, description: "First", amount: 1000, category: "Groceries" },
+    { id: 2, description: "Second", amount: 2000, category: "Utilities" },
+    { id: 3, description: "Third", amount: 2000, category: "Entertainment" },
   ]);
 
-  const [selectedCategory, setSelectedCategory] = useState("");
   const visibleExpenses = selectedCategory
     ? expenses.filter((e) => e.category === selectedCategory)
     : expenses;
 
   return (
     <>
-      <ExpenseForm></ExpenseForm>
+      <ExpenseForm
+        onSubmit={(expense) =>
+          setExpenses([
+            ...expenses,
+            {
+              ...expense,
+              id: expenses.length + 1,
+            },
+          ])
+        }
+      ></ExpenseForm>
       <ExpenseFilter
         onSelectCategory={(category) => setSelectedCategory(category)}
       ></ExpenseFilter>

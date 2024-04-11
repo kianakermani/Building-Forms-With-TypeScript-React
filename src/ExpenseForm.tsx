@@ -1,80 +1,95 @@
-import { categories } from "./App";
 import { useForm } from "react-hook-form";
-import "./App.css";
-import z from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import categories from "./categories";
 
 const schema = z.object({
   description: z
     .string()
-    .min(3, { message: "Your Description Should Be More Than 3 Characters !" }),
-  msg2: z
+    .min(3, { message: "Description should be at least 3 characters." })
+    .max(50),
+  amount: z
     .number({
-      invalid_type_error: "Your Amount Is Requierd",
+      invalid_type_error: "Amount is required",
     })
     .min(1000, {
       message: "Your Amount Should Be At Least 1000 Toman !",
     }),
+  category: z.enum(categories, {
+    errorMap: () => ({ message: "Category is required." }),
+  }),
 });
-type ExpenseFormData = z.infer<typeof schema>;
-const ExpenseForm = () => {
+
+type ExpenceFormData = z.infer<typeof schema>;
+
+interface Props {
+  onSubmit: (data: ExpenceFormData) => void;
+}
+
+const ExpenseForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
-  return (
-    <div>
-      <form
-        action=""
-        className="form"
-        onSubmit={handleSubmit((data) => console.log(data))}
-      >
-        <div className="mb-3">
-          <label className="form-label" htmlFor="Description">
-            Description
-          </label>
+  } = useForm<ExpenceFormData>({ resolver: zodResolver(schema) });
 
-          <input
-            id="Description"
-            {...register("description")}
-            type="text"
-            className="form-control"
-            autoComplete="off"
-          />
-          {errors.description && (
-            <p className="text-danger">{errors.description.message}</p>
-          )}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="Amount" className="form-label">
-            Amount
-          </label>
-          <input
-            id="Amount"
-            {...register("msg2", { valueAsNumber: true })}
-            type="number"
-            className="form-control"
-            autoComplete="off"
-          />
-          {errors.msg2 && <p className="text-danger">{errors.msg2.message}</p>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="Category" className="form-label">
-            Category
-          </label>
-          <select name="" id="Category" className="form-control">
-            <option value=""></option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button className="btn btn-primary">Submit</button>
-      </form>
-    </div>
+  return (
+    <form
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data);
+        reset();
+      })}
+    >
+      <div className="mb-3">
+        <label htmlFor="description" className="form-label">
+          Description
+        </label>
+        <input
+          {...register("description")}
+          id="description"
+          type="text"
+          className="form-control"
+          autoComplete="off"
+        />
+        {errors.description && (
+          <p className="text-danger">{errors.description.message}</p>
+        )}
+      </div>
+      <div className="mb-3">
+        <label htmlFor="amount" className="form-label">
+          Amount
+        </label>
+        <input
+          {...register("amount", { valueAsNumber: true })}
+          id="amount"
+          type="number"
+          className="form-control"
+        />
+        {errors.amount && (
+          <p className="text-danger">{errors.amount.message}</p>
+        )}
+      </div>
+      <div className="mb-3">
+        <label htmlFor="categoy" className="form-label">
+          Category
+        </label>
+        <select {...register("category")} id="category" className="form-select">
+          <option value=""></option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+        {errors.category && (
+          <p className="text-danger">{errors.category.message}</p>
+        )}
+      </div>
+      <button className="btn btn-primary" type="submit">
+        Submit
+      </button>
+    </form>
   );
 };
 
