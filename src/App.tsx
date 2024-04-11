@@ -1,7 +1,9 @@
 import { FieldValues, useForm } from "react-hook-form";
+import { useState } from "react";
 import "./App.css";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ExpenseList from "./ExpenseList";
 
 const schema = z.object({
   msg: z
@@ -19,10 +21,16 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 function App() {
+  const [expenses, setExpenses] = useState([
+    { id: 1, description: "aaa", amount: 1000, category: "utilities" },
+    { id: 2, description: "bbb", amount: 1000, category: "utilities" },
+    { id: 3, description: "ccc", amount: 1000, category: "utilities" },
+    { id: 4, description: "ddd", amount: 1000, category: "utilities" },
+  ]);
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = (data: FieldValues) => console.log(data);
@@ -68,9 +76,7 @@ function App() {
             <option value="Entertainment">Entertainment</option>
           </select>
         </div>
-        <button className="btn btn-primary" disabled={!isValid}>
-          Submit
-        </button>
+        <button className="btn btn-primary">Submit</button>
       </form>
 
       <div className="drop">
@@ -81,26 +87,10 @@ function App() {
           <option value="Entertainment">Entertainment</option>
         </select>
       </div>
-      <div className="t">
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Description</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Category</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ExpenseList
+        expenses={expenses}
+        onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+      ></ExpenseList>
     </>
   );
 }
