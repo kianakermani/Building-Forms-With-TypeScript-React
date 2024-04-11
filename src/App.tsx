@@ -4,6 +4,7 @@ import "./App.css";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ExpenseList from "./ExpenseList";
+import ExpenseFilter from "./ExpenseFilter";
 
 const schema = z.object({
   msg: z
@@ -22,11 +23,16 @@ type FormData = z.infer<typeof schema>;
 
 function App() {
   const [expenses, setExpenses] = useState([
-    { id: 1, description: "aaa", amount: 1000, category: "utilities" },
-    { id: 2, description: "bbb", amount: 1000, category: "utilities" },
-    { id: 3, description: "ccc", amount: 1000, category: "utilities" },
-    { id: 4, description: "ddd", amount: 1000, category: "utilities" },
+    { id: 1, description: "aaa", amount: 1000, category: "Utilities" },
+    { id: 2, description: "bbb", amount: 1000, category: "Utilities" },
+    { id: 3, description: "ccc", amount: 1000, category: "Utilities" },
+    { id: 4, description: "ddd", amount: 1000, category: "Utilities" },
   ]);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const visibleExpenses = selectedCategory
+    ? expenses.filter((e) => e.category === selectedCategory)
+    : expenses;
   const {
     register,
     handleSubmit,
@@ -79,16 +85,12 @@ function App() {
         <button className="btn btn-primary">Submit</button>
       </form>
 
-      <div className="drop">
-        <select name="" id="" className="form-control ">
-          <option value="All Categories">All Categories</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Utilities">Utilities</option>
-          <option value="Entertainment">Entertainment</option>
-        </select>
-      </div>
+      <ExpenseFilter
+        onSelectCategory={(category) => setSelectedCategory(category)}
+      ></ExpenseFilter>
+
       <ExpenseList
-        expenses={expenses}
+        expenses={visibleExpenses}
         onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
       ></ExpenseList>
     </>

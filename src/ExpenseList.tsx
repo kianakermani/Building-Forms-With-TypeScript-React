@@ -1,3 +1,5 @@
+import "./App.css";
+
 interface Expense {
   id: number;
   description: string;
