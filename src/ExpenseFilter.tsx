@@ -1,11 +1,21 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import categories from "./categories";
-interface Props {
-  onSelectCategory: (category: string) => void;
+
+interface Expense {
+  id: number;
+  description: string;
+  amount: number;
+  category: string;
 }
 
-const ExpenseFilter = ({ onSelectCategory }: Props) => {
+interface Props {
+  onSelectCategory: (category: string) => void;
+  expenses: Expense[];
+}
+
+const ExpenseFilter = ({ expenses, onSelectCategory }: Props) => {
+  if (expenses.length === 0) return null;
   return (
     <div>
       <select

@@ -31,6 +31,7 @@ function App() {
         }
       ></ExpenseForm>
       <ExpenseFilter
+        expenses={visibleExpenses}
         onSelectCategory={(category) => setSelectedCategory(category)}
       ></ExpenseFilter>
 
